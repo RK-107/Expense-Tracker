@@ -17,6 +17,8 @@ import { useAuth } from '@/contexts/authContext'
 import { updateUser } from '@/service/userService'
 import { useRouter } from 'expo-router'
 import * as ImagePicker from "expo-image-picker"
+import ImageUpload from '@/components/imageUpload'
+import { createOrUpdateWallet } from '@/service/walletService'
 
 const WalletModal = () => {
     const router = useRouter()
@@ -27,38 +29,29 @@ const WalletModal = () => {
     })
     const [loading, setIsLoading] = useState(false)
   
-    const onPickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images', 'videos'],
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        // console.log(result.assets[0]);
-
-        if (!result.canceled) {
-            // setUserData({...userData,image:result.assets[0]})
-        }
-
-    }
     const onsubmit = async () => {
         let name = walletData.name;
         let image = walletData.image;
-        if (!name.trim()) {
-            Alert.alert("User", "Please fill all the fields");
+        if (!name.trim() || !image) {
+            Alert.alert("Wallet", "Please fill all the fields");
             return;
         }
+        const data:WalletType={
+            name,
+            image,
+            uid:user?.uid
+        };
+        // To Do : include Wallet Id if Updating
         setIsLoading(true);
-        const res = await updateUser(user?.uid as string, walletData);
+        const res = await createOrUpdateWallet(data);
         setIsLoading(false)
+        // console.log("Result : ",res);
         if (res.success) {
-            // User Update hosie
-            updateUserData(user?.uid as string);
+           
             router.back();
 
         } else {
-            Alert.alert("User", res.msg);
+            Alert.alert("Wallet", res.msg);
         }
     }
 
@@ -91,6 +84,10 @@ const WalletModal = () => {
 
                         </Typo>
                        {/*  Image Input */}
+                       <ImageUpload 
+                       file={walletData.image} 
+                       onClear={()=>setWallet({...walletData,image:null})}
+                       onSelect={file =>setWallet({...walletData,image:file})} placeholder='Upload Image'/>
                        
 
                     </View>
@@ -102,7 +99,7 @@ const WalletModal = () => {
                     <Typo color={colors.black} fontWeight={"700"} size={18}>
                        Add Wallet
                     </Typo>
-                </Button>
+                </Button> 
 
             </View>
         </ModalWrapper>
