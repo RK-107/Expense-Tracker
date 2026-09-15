@@ -15,10 +15,10 @@ import { UserDataType, WalletType } from '@/types'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/contexts/authContext'
 import { updateUser } from '@/service/userService'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as ImagePicker from "expo-image-picker"
 import ImageUpload from '@/components/imageUpload'
-import { createOrUpdateWallet } from '@/service/walletService'
+import { createOrUpdateWallet, deleteWallet } from '@/service/walletService'
 
 const WalletModal = () => {
     const router = useRouter()
@@ -28,7 +28,18 @@ const WalletModal = () => {
         image: null,
     })
     const [loading, setIsLoading] = useState(false)
-  
+    const oldWallet: { name: string, image: string, id: string } = useLocalSearchParams();
+    // console.log("Old Wallet ", oldWallet)
+    useEffect(() => {
+        if (oldWallet?.id) {
+            setWallet({
+                name: oldWallet.name,
+                image: oldWallet.image
+            })
+        }
+
+    }, [])
+
     const onsubmit = async () => {
         let name = walletData.name;
         let image = walletData.image;
@@ -36,18 +47,19 @@ const WalletModal = () => {
             Alert.alert("Wallet", "Please fill all the fields");
             return;
         }
-        const data:WalletType={
+        const data: WalletType = {
             name,
             image,
-            uid:user?.uid
+            uid: user?.uid
         };
         // To Do : include Wallet Id if Updating
+        if (oldWallet.id) data.id = oldWallet.id
         setIsLoading(true);
         const res = await createOrUpdateWallet(data);
         setIsLoading(false)
         // console.log("Result : ",res);
         if (res.success) {
-           
+
             router.back();
 
         } else {
@@ -55,17 +67,52 @@ const WalletModal = () => {
         }
     }
 
+
+    const onDelete = async () => {
+        // console.log("Deleting the wallet",oldWallet?.id);
+        if (!oldWallet.id) return;
+        setIsLoading(true)
+        const res = await deleteWallet(oldWallet?.id)
+        setIsLoading(false);
+        if (res.success) {
+            router.back();
+        } else {
+            Alert.alert("Wallet", res.msg);
+        }
+
+    }
+    const showDeleteAlert = () => {
+        Alert.alert("Confirm",
+            "Are you sure about that\nThis action will remove all the tranaction related to this wallet",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () =>
+                        console.log("cancel delete"),
+                    style: "cancel"
+
+                },
+                {
+                    text: "Delete",
+                    onPress: () =>
+                        onDelete(),
+                    style: "destructive"
+
+                }
+            ]
+        )
+    }
     return (
         <ModalWrapper>
             <View style={styles.container}>
-                <Header title='New Wallet' leftIcon={<BackButton></BackButton>} style={{ marginBottom: spacingY._10 }} />
+                <Header title={oldWallet?.id ? "Update Wallet" : 'New Wallet'} leftIcon={<BackButton></BackButton>} style={{ marginBottom: spacingY._10 }} />
                 {/* Ekhane Amra name and Avaatar Change er Form Dibo */}
                 <ScrollView contentContainerStyle={styles.form}>
 
                     {/* Eta Name Container */}
                     <View style={styles.inputContainer}>
                         <Typo color={colors.neutral200}>
-                           Wallet Name
+                            Wallet Name
 
                         </Typo>
                         <Input placeholder='Salary'
@@ -80,26 +127,45 @@ const WalletModal = () => {
                     </View>
                     <View style={styles.inputContainer}>
                         <Typo color={colors.neutral200}>
-                           Wallet Icon
+                            Wallet Icon
 
                         </Typo>
-                       {/*  Image Input */}
-                       <ImageUpload 
-                       file={walletData.image} 
-                       onClear={()=>setWallet({...walletData,image:null})}
-                       onSelect={file =>setWallet({...walletData,image:file})} placeholder='Upload Image'/>
-                       
+                        {/*  Image Input */}
+                        <ImageUpload
+                            file={walletData.image}
+                            onClear={() => setWallet({ ...walletData, image: null })}
+                            onSelect={file => setWallet({ ...walletData, image: file })} placeholder='Upload Image' />
+
 
                     </View>
                 </ScrollView>
             </View>
 
             <View style={styles.footer}>
+                {
+                    oldWallet?.id && !loading && (
+                        <Button
+                            onPress={showDeleteAlert}
+
+                            style={{
+                                backgroundColor: colors.rose,
+                                paddingHorizontal: spacingX._15
+                            }}>
+                            <Icons.Trash
+                                color={colors.white}
+                                size={verticalScale(24)}
+                                weight='bold' />
+
+                        </Button>
+                    )
+                }
                 <Button onPress={onsubmit} loading={loading} style={{ flex: 1 }}>
                     <Typo color={colors.black} fontWeight={"700"} size={18}>
-                       Add Wallet
+                        {
+                            oldWallet.id ? "Update Wallet" : "Add Wallet"
+                        }
                     </Typo>
-                </Button> 
+                </Button>
 
             </View>
         </ModalWrapper>

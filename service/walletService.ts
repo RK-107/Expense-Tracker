@@ -1,6 +1,6 @@
 import { ResponseType, WalletType } from "@/types";
 import { uploadFileToCloudinary } from "./imageServie";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/config/firebase";
 
 export const createOrUpdateWallet = async (
@@ -40,4 +40,17 @@ export const createOrUpdateWallet = async (
         return { success: false, msg: error.message }
     }
 
+};
+export const deleteWallet=async (walletId:string):Promise<ResponseType>=>{
+   try{
+    const walletRef=doc(firestore,"wallets",walletId);
+    await deleteDoc(walletRef);
+
+    // ekhane Walllet er sob transection gulo delete kora hobe ,pore
+    return{success:true,msg:"Wallet Deleted Successfully"}
+
+   }catch(err:any){
+    console.log("Error Deleting Wallet ", err);
+    return{success:false,msg:err.message}
+   }
 }
