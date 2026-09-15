@@ -1,0 +1,122 @@
+import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import Typo from './ui/Typo'
+import { colors, spacingX, spacingY } from '@/constants/Theme'
+import { scale, verticalScale } from '@/Utilites/Styles'
+import * as Icons from 'phosphor-react-native';
+
+const HomeCard = () => {
+    return (
+        <ImageBackground
+            source={require('../assets/images/card5.png')}
+            resizeMode='stretch'
+            style={styles.bgImg}
+        >
+            <View style={styles.container}>
+                <View>
+                    {/* Total Balance  */}
+                    <View style={styles.totalBalanceRow}>
+                        <Typo color={colors.neutral800} size={17} fontWeight={"500"}>Total Balance:</Typo>
+                        <Icons.DotsThreeOutline
+                            size={verticalScale(23)}
+                            color='black'
+                            weight='fill' />
+
+                    </View>
+                    <Typo color='black' size={30} fontWeight={'bold'}>
+                        1999.00৳
+                    </Typo>
+                </View>
+                {/* Total expense and Income */}
+                <View style={styles.stats}>
+                    {/* income */}
+                    <View style={{ gap: verticalScale(5) }} >
+                        <View style={styles.incomeExpense}>
+                            <View style={styles.statsIcon}>
+                                <Icons.ArrowDown
+                                    size={verticalScale(15)}
+                                    color={colors.black}
+                                    weight='bold'
+                                />
+                            </View>
+                            <Typo color={colors.neutral700} size={16} fontWeight={'500'}>Income</Typo>
+
+                        </View>
+                        <View style={{ alignSelf: "center" }}>
+                            <Typo size={17} color={colors.green} fontWeight={"600"}>
+                                1569৳
+                            </Typo>
+                        </View>
+
+                    </View>
+                    {/* Expense */}
+                    <View style={{ gap: verticalScale(5) }} >
+                        <View style={styles.incomeExpense}>
+                            <View style={styles.statsIcon}>
+                                <Icons.ArrowUp
+                                    size={verticalScale(15)}
+                                    color={colors.black}
+                                    weight='bold'
+                                />
+                            </View>
+                            <Typo color={colors.neutral700} size={16} fontWeight={'500'}>Expense</Typo>
+
+                        </View>
+                        <View style={{ alignSelf: "center" }}>
+                            <Typo size={17} color='red' fontWeight={"600"}>
+                                1269৳
+                            </Typo>
+                        </View>
+
+                    </View>
+
+                </View>
+            </View>
+        </ImageBackground>
+
+    )
+}
+
+export default HomeCard
+
+const styles = StyleSheet.create({
+    bgImg: {
+        height: scale(210),
+        width: "100%",
+    },
+    container: {
+        padding: spacingX._20,
+        paddingHorizontal: scale(23),
+        height: "87%",
+        width: "100%",
+        justifyContent: "space-between",
+
+    },
+    stats: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+
+    },
+    totalBalanceRow: {
+
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: spacingY._5
+
+    },
+
+
+    statsIcon: {
+        backgroundColor: colors.neutral350,
+        padding: spacingY._5,
+        borderRadius: 50,
+
+    },
+    incomeExpense: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: spacingY._7
+    }
+})
