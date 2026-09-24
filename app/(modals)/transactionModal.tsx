@@ -24,6 +24,7 @@ import { expenseCatagories, transactionTypes } from '@/constants/data'
 import useFetchData from '@/hooks/useFetchData'
 import { orderBy, where } from 'firebase/firestore'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { createOrUpdateTransaction } from '@/service/transactionService'
 
 
 const transactionModal = () => {
@@ -69,7 +70,7 @@ const transactionModal = () => {
             Alert.alert("Transaction", "Please Fill All the fields");
             return;
         }
-        console.log("good to go");
+        // console.log("good to go");
         let transactionData:TransactionType = {
             type,
             amount,
@@ -81,7 +82,19 @@ const transactionModal = () => {
             uid:user?.uid
 
         }
-        console.log("Transaction Data : ",transactionData)
+        // console.log("Transaction Data : ",transactionData)
+
+        // To do : Include transaction id for updating
+
+        setIsLoading(true)
+
+        const res=await createOrUpdateTransaction(transactionData);
+        setIsLoading(false)
+        if(res.success){
+            router.back();
+        }else{
+            Alert.alert("Transaction",res.msg)
+        }
     }
 
 

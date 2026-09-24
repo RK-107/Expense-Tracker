@@ -10,6 +10,7 @@ export const colors={
      black:"#000",
      rose:"#ef4444",
      green:"hsl(144, 73%, 25%)",
+     ujjolgreen:"hsl(142, 76%, 45%)",
      neutral50:"#fafafa",
      neutral100:"#f5f5f5",
      neutral200:"#e5e5e5",

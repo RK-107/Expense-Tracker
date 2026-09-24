@@ -6,8 +6,9 @@ import { verticalScale } from '@/Utilites/Styles'
 import { colors, radius, spacingX, spacingY } from '@/constants/Theme'
 import { FlashList } from '@shopify/flash-list';
 import Loading from './ui/Loading'
-import { expenseCatagories } from '@/constants/data'
+import { expenseCatagories, incomeCatagory } from '@/constants/data'
 import Animated, { FadeInDown } from 'react-native-reanimated'
+import { Timestamp } from 'firebase/firestore'
 
 const TransactionList = ({
     data,
@@ -18,6 +19,7 @@ const TransactionList = ({
     const handleClick = () => {
         // Opens Transaction Details
     }
+
     return (
         <View style={styles.container}>
             {
@@ -62,11 +64,16 @@ const TransactionItem = ({
     index,
     handleClick
 }: TransactionItemProps) => {
-    let catagory = expenseCatagories["utilities"];
+    // console.log("item description",item.description)
+    let catagory = item.type == 'income' ? incomeCatagory : expenseCatagories[item.category!]
     // console.log("catagory",catagory);
     const IconComponent = catagory.icon;
-    return <Animated.View entering={FadeInDown.delay(index*100).springify().damping(30)}>
-        <TouchableOpacity style={styles.row} onPress={()=>handleClick(item)}>
+    const date=(item?.date as Timestamp)?.toDate()?.toLocaleDateString("en-GB",{
+        day:"numeric",
+        month:"short"
+    })
+    return <Animated.View entering={FadeInDown.delay(index * 100).springify().damping(30)}>
+        <TouchableOpacity style={styles.row} onPress={() => handleClick(item)}>
             <View style={[styles.icon, { backgroundColor: catagory.bgColor }]} >
                 {
                     IconComponent && (
@@ -85,16 +92,16 @@ const TransactionItem = ({
                     {catagory.label}
                 </Typo>
                 <Typo size={12} color={colors.neutral400} textProps={{ numberOfLines: 1 }}>
-                    paid wifi bill
+                    {item.description}
                 </Typo>
 
             </View>
             <View style={styles.amountDate}>
-                <Typo fontWeight={"500"} color={colors.rose}>
-                    -280৳
+                <Typo fontWeight={"500"} color={item?.type == 'income' ? colors.ujjolgreen : "#F51C1C"}>
+                    {item?.type == 'income' ? `+${item.amount}` : `-${item.amount}`}৳
                 </Typo>
                 <Typo size={13} color={colors.neutral400}>
-                    9th Sept
+                    {date}
                 </Typo>
             </View>
         </TouchableOpacity>
