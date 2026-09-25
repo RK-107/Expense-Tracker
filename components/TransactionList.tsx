@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Typo from './ui/Typo'
-import { TransactionItemProps, TransactionListType } from '@/types'
+import { TransactionItemProps, TransactionListType, TransactionType } from '@/types'
 import { verticalScale } from '@/Utilites/Styles'
 import { colors, radius, spacingX, spacingY } from '@/constants/Theme'
 import { FlashList } from '@shopify/flash-list';
@@ -9,6 +9,7 @@ import Loading from './ui/Loading'
 import { expenseCatagories, incomeCatagory } from '@/constants/data'
 import Animated, { FadeInDown } from 'react-native-reanimated'
 import { Timestamp } from 'firebase/firestore'
+import { useRouter } from 'expo-router'
 
 const TransactionList = ({
     data,
@@ -16,8 +17,25 @@ const TransactionList = ({
     loading,
     emptyListMessage
 }: TransactionListType) => {
-    const handleClick = () => {
+    const router=useRouter();
+
+    const handleClick = (item:TransactionType) => {
         // Opens Transaction Details
+        router.push({
+            pathname:"/(modals)/transactionModal",
+            params:{
+                id:item?.id,
+                type:item?.type,
+                amount:item?.amount,
+                catagory:item?.category?.toString(),
+                date:(item.date as Timestamp)?.toDate()?.toISOString(),
+                description:item?.description,
+                image:item?.image,
+                uid:item?.uid,
+                walletId:item?.walletId,
+            },
+        })
+
     }
 
     return (
@@ -71,6 +89,7 @@ const TransactionItem = ({
     const date=(item?.date as Timestamp)?.toDate()?.toLocaleDateString("en-GB",{
         day:"numeric",
         month:"short"
+        
     })
     return <Animated.View entering={FadeInDown.delay(index * 100).springify().damping(30)}>
         <TouchableOpacity style={styles.row} onPress={() => handleClick(item)}>
