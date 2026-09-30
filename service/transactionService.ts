@@ -59,7 +59,7 @@ export const createOrUpdateTransaction = async (
         return { success: true, data: { ...transactionData, id: transactionRef.id } }
 
     } catch (err: any) {
-        console.log("Error creating or  Updating transaction ", err);
+        // console.log("Error creating or  Updating transaction ", err);
         return { success: false, msg: err.message }
     }
 };
@@ -74,7 +74,7 @@ const updateWalletForNewTransaction = async (
         const walletSnap = await getDoc(walletRef)
 
         if (!walletSnap.exists()) {
-            console.log("Error Updating wallet for new transaction  transaction ");
+            // console.log("Error Updating wallet for new transaction  transaction ");
             return { success: false, msg: "Wallet not found " }
         }
         const walletData = walletSnap.data() as WalletType;
@@ -102,7 +102,7 @@ const updateWalletForNewTransaction = async (
 
         return { success: true }
     } catch (err: any) {
-        console.log("Error Updating wallet for new transaction  transaction ", err);
+        // console.log("Error Updating wallet for new transaction  transaction ", err);
         return { success: false, msg: err.message }
     }
 };
@@ -159,6 +159,7 @@ const revertAndUpdateWallets = async (
             [revertType]: revertedIncomeExpenseAmount
         })
 
+
         // revert Completed
 
         //-----------------------------------------------------------------------------------//
@@ -191,7 +192,7 @@ const revertAndUpdateWallets = async (
 
         return { success: true };
     } catch (err: any) {
-        console.log("Error Updating wallet for new transaction  transaction ", err);
+        // console.log("Error Updating wallet for new transaction  transaction ", err);
         return { success: false, msg: err.message }
     }
 };
@@ -238,7 +239,7 @@ export const deleteTransaction = async (transactionId: string, walletId: string)
 
         return { success: true };
     } catch (err: any) {
-        console.log("Error Updating wallet for new transaction  transaction ", err);
+        // console.log("Error Updating wallet for new transaction  transaction ", err);
         return { success: false, msg: err.message }
     }
 
@@ -310,7 +311,7 @@ export const fetchWeeklyStats = async (uid: string): Promise<ResponseType> => {
 
 
     } catch (err: any) {
-        console.error("Error Fetching weekly Transactions ", err);
+        // console.error("Error Fetching weekly Transactions ", err);
         return { success: false, msg: err.message }
     }
 
@@ -383,7 +384,7 @@ export const fetchMonthlyStats = async (uid: string): Promise<ResponseType> => {
 
 
     } catch (err: any) {
-        console.error("Error Fetching Monthly Transactions ", err);
+        // console.error("Error Fetching Monthly Transactions ", err);
         return { success: false, msg: "Failed to fetch Monthly transactions" }
     }
 
@@ -460,7 +461,7 @@ export const fetchYearlyStats = async (uid: string): Promise<ResponseType> => {
 
 
     } catch (err: any) {
-        console.error("Error Fetching Yearly Transactions ", err);
+        // console.error("Error Fetching Yearly Transactions ", err);
         return { success: false, msg: "Failed to fetch Yearly transactions" }
     }
 

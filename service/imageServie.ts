@@ -32,7 +32,7 @@ export const uploadFileToCloudinary = async (
       }
       return { success: true }
    } catch (error: any) {
-      console.log("Got Error Uploading File ", error);
+      // console.log("Got Error Uploading File ", error);
       return { success: false, msg: error.message || "could Not Upload File " }
    }
 

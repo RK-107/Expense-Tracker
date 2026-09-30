@@ -36,7 +36,7 @@ export const createOrUpdateWallet = async (
             return{success:true,data:{...walletToSave,id:walletRef.id}}
 
     } catch (error: any) {
-        console.log("Error creating or Updating Wallet : ", error);
+        // console.log("Error creating or Updating Wallet : ", error);
         return { success: false, msg: error.message }
     }
 
@@ -52,7 +52,7 @@ export const deleteWallet=async (walletId:string):Promise<ResponseType>=>{
     return{success:true,msg:"Wallet Deleted Successfully"}
 
    }catch(err:any){
-    console.log("Error Deleting Wallet ", err);
+    // console.log("Error Deleting Wallet ", err);
     return{success:false,msg:err.message}
    }
 }
@@ -82,7 +82,7 @@ export const deleteTransactionsByWallet=async (walletId:string):Promise<Response
     return{success:true,msg:"All the transaction deleted Successfully"}
 
    }catch(err:any){
-    console.log("Error Deleting Wallet ", err);
+    // console.log("Error Deleting Wallet ", err);
     return{success:false,msg:err.message}
    }
 }
