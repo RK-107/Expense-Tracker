@@ -14,25 +14,25 @@ import { Alert, Pressable, StyleSheet, View } from 'react-native'
 const Login = () => {
     const emailRef = useRef("");
     const passwordRef = useRef("");
-    const [isLoading,setIsLoading]=useState(false)
-    const router=useRouter();
-    const {login:loginUser}=useAuth();
-    const handleSubmit=async()=>{
-         if(!emailRef.current || !passwordRef.current){
-            Alert.alert('Login',"Please Fill Both the fields");
+    const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter();
+    const { login: loginUser } = useAuth();
+    const handleSubmit = async () => {
+        if (!emailRef.current || !passwordRef.current) {
+            Alert.alert('Login', "Please Fill Both the fields");
             return;
-         }
+        }
         //  console.log(`email : ${emailRef.current}`)
         //  console.log(`password : ${passwordRef.current}`)
         //  console.log("Good to go")
         setIsLoading(true);
-        const res=await loginUser(emailRef.current,passwordRef.current);
+        const res = await loginUser(emailRef.current, passwordRef.current);
         setIsLoading(false);
-        if(!res.success){
-           Alert.alert('Login',res.msg);
+        if (!res.success) {
+            Alert.alert('Login', res.msg);
         }
     }
-   
+
     return (
         <ScreenWrapper>
             <View style={styles.container}>
@@ -45,7 +45,7 @@ const Login = () => {
                         Hey,
                     </Typo>
                     <Typo size={30} fontWeight={"800"}>
-                        Why are You Here?
+                        Good to see you
                     </Typo>
 
                 </View>
@@ -76,28 +76,28 @@ const Login = () => {
                             weight='fill' />} >
 
                     </Input>
-                   <Typo fontWeight={'300'} size={14} color={colors.text} style={{alignSelf:"flex-end"}}>
-                      Forgot Password?
-                   </Typo>
-                   <Button loading={isLoading} onPress={handleSubmit}>
-                        <Typo fontWeight={'700'} color={colors.black} size={21} >
-                          Login
-                        </Typo>
-                   </Button>
-                </View>
-              {/* Fotter Area */}
-              <View style={styles.footer}>
-                <Typo size={15}>
-                    Don't Have an account?
-
-                </Typo>
-                <Pressable onPress={()=>router.navigate('/(auth)/Register')}>
-                    <Typo size={15} fontWeight={'700'} color={colors.primary}>
-                        Sign Up
+                    <Typo fontWeight={'300'} size={14} color={colors.text} style={{ alignSelf: "flex-end" }}>
+                        Forgot Password?
                     </Typo>
-                </Pressable>
+                    <Button loading={isLoading} onPress={handleSubmit}>
+                        <Typo fontWeight={'700'} color={colors.black} size={21} >
+                            Login
+                        </Typo>
+                    </Button>
+                </View>
+                {/* Fotter Area */}
+                <View style={styles.footer}>
+                    <Typo size={15}>
+                        Don't Have an account?
 
-              </View>
+                    </Typo>
+                    <Pressable onPress={() => router.navigate('/(auth)/Register')}>
+                        <Typo size={15} fontWeight={'700'} color={colors.primary}>
+                            Sign Up
+                        </Typo>
+                    </Pressable>
+
+                </View>
             </View>
         </ScreenWrapper>
     )

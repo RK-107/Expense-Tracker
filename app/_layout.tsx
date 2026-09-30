@@ -12,7 +12,11 @@ const StackLayout = () => {
       <Stack.Screen name='(modals)/walletModal' options={{
         presentation: "modal"
       }} />
-       <Stack.Screen name='(modals)/transactionModal' options={{
+      <Stack.Screen name='(modals)/transactionModal' options={{
+        presentation: "modal",
+        animation: "slide_from_bottom",
+      }} />
+      <Stack.Screen name='(modals)/searchModal' options={{
         presentation: "modal",
         animation: "slide_from_bottom",
       }} />

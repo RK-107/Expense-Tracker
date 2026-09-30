@@ -41,7 +41,7 @@ const Home = () => {
             </Typo>
 
           </View>
-          <TouchableOpacity style={styles.searcIcon}>
+          <TouchableOpacity style={styles.searcIcon} onPress={()=>router.push('/(modals)/searchModal')}>
             <Icons.MagnifyingGlass
               size={verticalScale(22)}
               color={colors.neutral200}
